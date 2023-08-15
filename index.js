@@ -4,8 +4,10 @@ const app = express();
 const dotenv = require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require('./routes/authRoutes');
+const productRouter = require('./routes/productRoute');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 //connect to DB
@@ -15,6 +17,7 @@ dbConnect();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(morgan("dev"));
 
 // app.use('/', (req, res) => {
 //     res.send("Hello form server side!");
@@ -22,6 +25,7 @@ app.use(cookieParser());
 
 //ROUTES
 app.use('/api/user', authRouter);
+app.use('/api/product', productRouter);
 
 //use Error Handler
 app.use(notFound);
