@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require('./routes/authRoutes');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 //connect to DB
@@ -13,6 +14,7 @@ dbConnect();
 //middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // app.use('/', (req, res) => {
 //     res.send("Hello form server side!");
