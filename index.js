@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require('./routes/authRoutes');
 const productRouter = require('./routes/productRoute');
+const blogRouter = require('./routes/blogRoute');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -26,6 +27,8 @@ app.use(morgan("dev"));
 //ROUTES
 app.use('/api/user', authRouter);
 app.use('/api/product', productRouter);
+app.use('/api/blog', blogRouter);
+
 
 //use Error Handler
 app.use(notFound);
