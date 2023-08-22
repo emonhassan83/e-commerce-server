@@ -1,6 +1,7 @@
 const Product = require("../models/productModal");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
+const validateMongodbId = require("../utils/validateMongodbId");
 
 //create a new product
 const createProduct = asyncHandler(async (req, res) => {
@@ -17,7 +18,8 @@ const createProduct = asyncHandler(async (req, res) => {
 
 //update a product
 const updateAProduct = asyncHandler(async (req, res) => {
-    const productId = req.params.id; 
+    const productId = req.params.id;
+    validateMongodbId(productId); 
   try {
     if (req.body.title) {
       req.body.slug = slugify(req.body.title);
