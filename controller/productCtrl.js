@@ -141,7 +141,7 @@ const addToWishlist = asyncHandler(async (req, res) => {
 //add to rating
 const addToRating = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { star, prodId } = req.body;
+  const { star, prodId, comment } = req.body;
   try {
     const product = await Product.findById(prodId);
     let alreadyRated = product.ratings.find(
@@ -150,7 +150,7 @@ const addToRating = asyncHandler(async (req, res) => {
     if (alreadyRated) {
       const updateRating = await Product.updateOne(
         { ratings: { $elemMatch: alreadyRated } },
-        { $set: { "ratings.$.star": star } },
+        { $set: { "ratings.$.star": star, "ratings.$.comment": comment } },
         { new: true }
       );
     } else {
@@ -158,7 +158,7 @@ const addToRating = asyncHandler(async (req, res) => {
         prodId,
         {
           $push: {
-            ratings: { star: star, postedby: _id },
+            ratings: { star: star, comment: comment, postedby: _id },
           },
         },
         { new: true }
@@ -167,8 +167,9 @@ const addToRating = asyncHandler(async (req, res) => {
 
     const getAllRatings = await Product.findById(prodId);
     let totalRating = getAllRatings.ratings.length;
-    let ratingSum = getAllRatings.ratings.map((item) =>
-      item.star).reduce((prev, curr) => prev + curr, 0);
+    let ratingSum = getAllRatings.ratings
+      .map((item) => item.star)
+      .reduce((prev, curr) => prev + curr, 0);
     let actualRating = Math.round(ratingSum / totalRating);
     let finalProduct = await Product.findByIdAndUpdate(
       prodId,
